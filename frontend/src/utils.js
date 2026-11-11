@@ -38,6 +38,26 @@ export function dueInfo(todo) {
   return { label: `Vence ${formatDate(todo.vencimiento)}`, tone: 'none' }
 }
 
+// Traduce al español los mensajes de error más comunes de Supabase Auth
+const ERRORES_AUTH = {
+  'invalid login credentials': 'Correo o contraseña incorrectos',
+  'email not confirmed': 'Todavía no confirmaste tu correo. Revisa tu bandeja de entrada.',
+  'email rate limit exceeded':
+    'Se enviaron demasiados correos de confirmación. Espera un rato (aprox. 1 hora) e intenta de nuevo.',
+  'user already registered': 'Ya existe una cuenta con ese correo. Inicia sesión.',
+  'password should be at least 6 characters': 'La contraseña debe tener al menos 6 caracteres',
+  'unable to validate email address: invalid format': 'El correo no tiene un formato válido',
+}
+
+export function traducirError(mensaje) {
+  const clave = String(mensaje || '').toLowerCase().replace(/\.$/, '')
+  if (ERRORES_AUTH[clave]) return ERRORES_AUTH[clave]
+  if (clave.startsWith('for security purposes')) {
+    return 'Por seguridad, espera unos segundos antes de intentarlo de nuevo.'
+  }
+  return mensaje
+}
+
 // Valor para un <input type="date"> (AAAA-MM-DD)
 export function toInputDate(value) {
   return value ? String(value).slice(0, 10) : ''

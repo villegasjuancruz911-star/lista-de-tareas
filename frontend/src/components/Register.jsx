@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api'
+import { traducirError } from '../utils'
 import AuthLayout from './AuthLayout'
 
 function Register({ onRegistered, onGoToLogin }) {
@@ -31,7 +32,7 @@ function Register({ onRegistered, onGoToLogin }) {
           : 'Cuenta creada. Ya puedes iniciar sesión.',
       )
     } catch (err) {
-      setError(err.message)
+      setError(traducirError(err.message))
     } finally {
       setLoading(false)
     }

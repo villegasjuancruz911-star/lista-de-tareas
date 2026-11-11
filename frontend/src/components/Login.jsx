@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api'
+import { traducirError } from '../utils'
 import AuthLayout from './AuthLayout'
 
 function Login({ onLogin, onGoToRegister, notice }) {
@@ -16,13 +17,7 @@ function Login({ onLogin, onGoToRegister, notice }) {
       const data = await api.login(email.trim(), password)
       onLogin({ token: data.session.access_token, user: data.user })
     } catch (err) {
-      setError(
-        err.message === 'Invalid login credentials'
-          ? 'Correo o contraseña incorrectos'
-          : err.message === 'Email not confirmed'
-            ? 'Todavía no confirmaste tu correo. Revisa tu bandeja de entrada.'
-            : err.message,
-      )
+      setError(traducirError(err.message))
     } finally {
       setLoading(false)
     }
